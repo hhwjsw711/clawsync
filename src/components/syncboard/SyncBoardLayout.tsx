@@ -14,6 +14,7 @@ import {
   ChatCircle,
   ClipboardText,
   Gear,
+  EnvelopeSimple,
 } from '@phosphor-icons/react';
 import './SyncBoardLayout.css';
 
@@ -25,6 +26,7 @@ const navItems = [
   { path: '/syncboard/mcp', label: 'MCP Servers', Icon: Plug },
   { path: '/syncboard/channels', label: 'Channels', Icon: DeviceMobile },
   { path: '/syncboard/x', label: 'X (Twitter)', Icon: XLogo },
+  { path: '/syncboard/agentmail', label: 'AgentMail', Icon: EnvelopeSimple },
   { path: '/syncboard/api', label: 'API Keys', Icon: Key },
   { path: '/syncboard/threads', label: 'Threads', Icon: ChatCircle },
   { path: '/syncboard/activity', label: 'Activity Log', Icon: ClipboardText },

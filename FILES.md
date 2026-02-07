@@ -26,6 +26,7 @@ Brief descriptions of key files in the ClawSync codebase.
 | `setup.ts` | Seed data and first-run configuration |
 | `syncboardAuth.ts` | SyncBoard password authentication |
 | `xTwitter.ts` | X/Twitter API v2 integration |
+| `agentMail.ts` | AgentMail email integration |
 | `auth.config.ts` | WorkOS AuthKit JWT validation (placeholder) |
 
 ### convex/agent/
@@ -60,6 +61,7 @@ Brief descriptions of key files in the ClawSync codebase.
 | `SyncBoardMCP.tsx` | MCP server configuration |
 | `SyncBoardChannels.tsx` | Channel integrations (Telegram, Discord, etc.) |
 | `SyncBoardX.tsx` | X/Twitter configuration and tweet management |
+| `SyncBoardAgentMail.tsx` | AgentMail inbox and email management |
 | `SyncBoardAPI.tsx` | API key management |
 | `SyncBoardThreads.tsx` | Conversation thread viewer |
 | `SyncBoardActivity.tsx` | Activity log viewer |

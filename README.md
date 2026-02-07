@@ -37,8 +37,8 @@ Be one of the first three to deploy ClawSync and show it off. Post a live demo o
 - **MCP Support** - Connect to MCP servers or expose your agent as one
 - **Channel Integrations** - Telegram, Discord, WhatsApp, Slack, Email
 - **X (Twitter) Integration** - Read, reply, and post tweets from your agent
+- **AgentMail** - Email inboxes for your agent with rate limits
 - **Live Activity Feed** - Public real-time log of agent actions
-- **Self-Hosted** - No external hosting required (Convex Self Static Hosting)
 
 ## Quick Start
 

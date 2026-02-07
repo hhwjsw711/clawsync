@@ -314,6 +314,53 @@ export default defineSchema({
     updatedAt: v.number(),
   }),
 
+  // ============================================
+  // AgentMail Integration
+  // ============================================
+
+  // AgentMail config
+  agentMailConfig: defineTable({
+    enabled: v.boolean(),
+    defaultInboxId: v.optional(v.string()), // Default inbox for sending
+    webhookSecret: v.optional(v.string()), // For verifying incoming webhooks
+    autoReply: v.boolean(), // Auto-reply to incoming emails
+    forwardToAgent: v.boolean(), // Forward emails to agent for processing
+    rateLimitPerHour: v.number(),
+    updatedAt: v.number(),
+  }),
+
+  // AgentMail inboxes
+  agentMailInboxes: defineTable({
+    inboxId: v.string(), // AgentMail inbox ID
+    email: v.string(), // Full email address
+    displayName: v.optional(v.string()),
+    isDefault: v.boolean(),
+    isActive: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_inboxId', ['inboxId'])
+    .index('by_email', ['email'])
+    .index('by_default', ['isDefault']),
+
+  // AgentMail message log (for tracking)
+  agentMailMessages: defineTable({
+    messageId: v.string(), // AgentMail message ID
+    inboxId: v.string(),
+    direction: v.union(v.literal('inbound'), v.literal('outbound')),
+    fromEmail: v.string(),
+    toEmail: v.string(),
+    subject: v.string(),
+    bodyPreview: v.optional(v.string()), // First 200 chars
+    threadId: v.optional(v.string()), // ClawSync thread if linked
+    processedByAgent: v.boolean(),
+    agentResponse: v.optional(v.string()),
+    timestamp: v.number(),
+  })
+    .index('by_messageId', ['messageId'])
+    .index('by_inboxId', ['inboxId'])
+    .index('by_timestamp', ['timestamp']),
+
   // Cached tweets for landing page display
   xTweets: defineTable({
     tweetId: v.string(), // X/Twitter tweet ID

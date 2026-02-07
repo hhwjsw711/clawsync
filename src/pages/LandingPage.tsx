@@ -17,6 +17,7 @@ import {
   Key,
   ClipboardText,
   XLogo,
+  EnvelopeSimple,
 } from "@phosphor-icons/react";
 
 export function LandingPage() {
@@ -167,6 +168,16 @@ export function LandingPage() {
               <p>
                 Telegram, Discord, WhatsApp, Slack, Email. One agent, many
                 channels.
+              </p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">
+                <EnvelopeSimple size={32} weight="regular" />
+              </div>
+              <h3>AgentMail</h3>
+              <p>
+                Email inboxes for your agent. Send, receive, and process emails
+                via API with rate limits.
               </p>
             </div>
           </div>

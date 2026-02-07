@@ -536,6 +536,7 @@
           <a href="#mcp-servers" class="nav-link">MCP Servers</a>
           <a href="#channels" class="nav-link">Channel Integrations</a>
           <a href="#x-twitter" class="nav-link">X/Twitter</a>
+          <a href="#agentmail" class="nav-link">AgentMail</a>
         </div>
 
         <div class="nav-section">
@@ -820,6 +821,22 @@ XAI_API_KEY=xai-...</code><button class="copy-btn" onclick="copyCode(this)">Copy
           </tbody>
         </table>
 
+        <h3>AgentMail</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Variable</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>AGENTMAIL_API_KEY</code></td>
+              <td>AgentMail API key from console.agentmail.to</td>
+            </tr>
+          </tbody>
+        </table>
+
         <h3>WorkOS AuthKit (Optional)</h3>
         <table>
           <thead>
@@ -926,6 +943,18 @@ XAI_API_KEY=xai-...</code><button class="copy-btn" onclick="copyCode(this)">Copy
             <tr>
               <td><code>xTweets</code></td>
               <td>Cached tweets</td>
+            </tr>
+            <tr>
+              <td><code>agentMailConfig</code></td>
+              <td>AgentMail settings</td>
+            </tr>
+            <tr>
+              <td><code>agentMailInboxes</code></td>
+              <td>Email inboxes</td>
+            </tr>
+            <tr>
+              <td><code>agentMailMessages</code></td>
+              <td>Email message log</td>
             </tr>
           </tbody>
         </table>
@@ -1222,6 +1251,59 @@ https://your-deployment.convex.site/webhook/email</code><button class="copy-btn"
         </table>
       </section>
 
+      <!-- AgentMail -->
+      <section id="agentmail" class="doc-section">
+        <h2>AgentMail Integration</h2>
+        <p>AgentMail provides email inboxes for your AI agent. Send, receive, and process emails programmatically.</p>
+
+        <h3>Setup</h3>
+        <ol>
+          <li>Get an API key from <a href="https://console.agentmail.to" target="_blank">console.agentmail.to</a></li>
+          <li>Set <code>AGENTMAIL_API_KEY</code> in your Convex environment variables</li>
+          <li>Enable AgentMail in SyncBoard → AgentMail</li>
+          <li>Create your first inbox</li>
+        </ol>
+
+        <h3>Features</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Multiple inboxes</td>
+              <td>Create and manage multiple email addresses</td>
+            </tr>
+            <tr>
+              <td>Send emails</td>
+              <td>Agent can send emails on your behalf</td>
+            </tr>
+            <tr>
+              <td>Receive emails</td>
+              <td>Incoming emails forwarded to agent</td>
+            </tr>
+            <tr>
+              <td>Auto-reply</td>
+              <td>Agent automatically responds to emails</td>
+            </tr>
+            <tr>
+              <td>Rate limiting</td>
+              <td>Configurable emails per hour</td>
+            </tr>
+            <tr>
+              <td>MCP tools</td>
+              <td>Email tools available via MCP</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Environment Variable</h3>
+        <pre><code>AGENTMAIL_API_KEY=your-api-key-here</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+      </section>
+
       <!-- SyncBoard -->
       <section id="syncboard" class="doc-section">
         <h2>SyncBoard Dashboard</h2>
@@ -1263,6 +1345,10 @@ https://your-deployment.convex.site/webhook/email</code><button class="copy-btn"
             <tr>
               <td>X</td>
               <td>Twitter integration</td>
+            </tr>
+            <tr>
+              <td>AgentMail</td>
+              <td>Email inbox management</td>
             </tr>
             <tr>
               <td>Threads</td>
@@ -1502,6 +1588,12 @@ echo -n "your-password" | shasum -a 256
 | \`X_ACCESS_TOKEN\` | User access token |
 | \`X_ACCESS_SECRET\` | User access token secret |
 
+### AgentMail Integration
+
+| Variable | Description |
+|----------|-------------|
+| \`AGENTMAIL_API_KEY\` | API key from agentmail.to dashboard |
+
 ## Model Providers
 
 ### Anthropic (Claude) - Recommended
@@ -1563,6 +1655,7 @@ Skills extend your agent's capabilities. Manage them in SyncBoard → Skills.
 | MCP | Connect MCP servers |
 | Channels | Configure messaging platforms |
 | X | Twitter integration |
+| AgentMail | Email inbox management |
 | Threads | View conversation history |
 | Activity | Agent action log |
 | API | Manage API keys |

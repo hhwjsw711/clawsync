@@ -142,6 +142,16 @@
   - Removed "No Vercel or Netlify required" from docs.html
   - Renamed "Self Hosting" section to "Deployment" in docs.html
 
+- [x] AgentMail Integration
+  - Created `convex/agentMail.ts` with queries, mutations, actions
+  - Created `src/pages/SyncBoardAgentMail.tsx` UI page
+  - Added schema tables: `agentMailConfig`, `agentMailInboxes`, `agentMailMessages`
+  - Added to SyncBoardLayout navigation
+  - Added route in App.tsx
+  - Added to features.html and README.md
+  - Features: create/delete inboxes, send/receive emails, rate limits
+  - MCP tools available for agent email operations
+
 ---
 
 ## In Progress

@@ -71,6 +71,17 @@ All notable changes to ClawSync are documented here.
 - Requirements: show at least 3 agent features
 - Dark background with trophy icon
 
+#### AgentMail Integration
+- New `convex/agentMail.ts` backend with full API support
+- Create, manage, and delete email inboxes
+- Send and receive emails via AgentMail API
+- Rate limiting per hour configurable in SyncBoard
+- Auto-reply and forward-to-agent options
+- Message logging and tracking
+- New database tables: `agentMailConfig`, `agentMailInboxes`, `agentMailMessages`
+- SyncBoard AgentMail page (`/syncboard/agentmail`)
+- MCP integration for agent email tools
+
 #### Icon System
 - Replaced all emojis with Phosphor icons (@phosphor-icons/react)
 - Updated LandingPage.tsx with Phosphor icons for features and activity
