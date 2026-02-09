@@ -43,6 +43,7 @@ export const generateUploadUrl = mutation({
 export const markComplete = mutation({
   args: {
     uploadToken: v.string(),
+    storageId: v.optional(v.id('_storage')),
   },
   handler: async (ctx, args) => {
     const file = await ctx.db
@@ -51,10 +52,14 @@ export const markComplete = mutation({
       .first();
 
     if (file) {
-      await ctx.db.patch(file._id, {
+      const updateData: any = {
         status: 'complete',
         updatedAt: Date.now(),
-      });
+      };
+      if (args.storageId) {
+        updateData.storageId = args.storageId;
+      }
+      await ctx.db.patch(file._id, updateData);
     }
   },
 });

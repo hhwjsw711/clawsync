@@ -269,3 +269,45 @@
 .message-file-attachment:hover .file-download {
   color: var(--interactive);
 }
+
+/* Generated Image Preview */
+.generated-image-preview {
+  margin-top: var(--space-3);
+}
+
+.generated-image {
+  max-width: 100%;
+  max-height: 400px;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: transform 0.2s ease;
+}
+
+.generated-image:hover {
+  transform: scale(1.02);
+}
+
+.image-actions {
+  margin-top: var(--space-2);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.image-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  transition: background 0.2s ease;
+}
+
+.image-download-btn:hover {
+  background: var(--bg-hover);
+}

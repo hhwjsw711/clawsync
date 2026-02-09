@@ -214,8 +214,12 @@ export function AgentChat({
           throw new Error(`Failed to upload ${file.name}`);
         }
 
+        // Extract storageId from upload response
+        const uploadResult = await uploadResponse.json();
+        const storageId = uploadResult.storageId;
+
         // Mark upload as complete (using token as identifier)
-        await markComplete({ uploadToken: uploadToken });
+        await markComplete({ uploadToken: uploadToken, storageId: storageId });
 
         // Get the actual file URL
         const fileUrl = await getFileUrlByToken({ uploadToken });

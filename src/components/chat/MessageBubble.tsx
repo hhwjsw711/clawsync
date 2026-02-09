@@ -81,27 +81,59 @@ export function MessageBubble({ role, content, timestamp, toolCalls, attachments
       {/* Tool calls */}
       {toolCalls && toolCalls.length > 0 && (
         <div className="tool-calls">
-          {toolCalls.map((tc, i) => (
-            <details key={i} className="tool-call">
-              <summary className="tool-call-summary">
-                <span className="tool-call-icon">&#9881;</span>
-                <span className="tool-call-name">{tc.name}</span>
-                <span className="tool-call-badge">tool call</span>
-              </summary>
-              <div className="tool-call-details">
-                <div className="tool-call-section">
-                  <strong>Input:</strong>
-                  <pre className="tool-call-json">{tc.args}</pre>
-                </div>
-                {tc.result && (
+          {toolCalls.map((tc, i) => {
+            // Parse result to check for imageUrl
+            let resultData: any = null;
+            try {
+              resultData = JSON.parse(tc.result);
+            } catch {}
+            
+            const isImageGeneration = tc.name === 'generate_image' && resultData?.imageUrl;
+            
+            return (
+              <details key={i} className="tool-call">
+                <summary className="tool-call-summary">
+                  <span className="tool-call-icon">&#9881;</span>
+                  <span className="tool-call-name">{tc.name}</span>
+                  <span className="tool-call-badge">tool call</span>
+                </summary>
+                <div className="tool-call-details">
                   <div className="tool-call-section">
-                    <strong>Output:</strong>
-                    <pre className="tool-call-json">{tc.result}</pre>
+                    <strong>Input:</strong>
+                    <pre className="tool-call-json">{tc.args}</pre>
                   </div>
-                )}
-              </div>
-            </details>
-          ))}
+                  {tc.result && (
+                    <div className="tool-call-section">
+                      <strong>Output:</strong>
+                      {isImageGeneration ? (
+                        <div className="generated-image-preview">
+                          <img 
+                            src={resultData.imageUrl} 
+                            alt="Generated image"
+                            className="generated-image"
+                            onClick={() => window.open(resultData.imageUrl, '_blank')}
+                          />
+                          <div className="image-actions">
+                            <a 
+                              href={resultData.imageUrl} 
+                              download 
+                              className="image-download-btn"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Download size={16} />
+                              Download
+                            </a>
+                          </div>
+                        </div>
+                      ) : (
+                        <pre className="tool-call-json">{tc.result}</pre>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </details>
+            );
+          })}
         </div>
       )}
 
