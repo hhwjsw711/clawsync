@@ -18,6 +18,8 @@ import {
   ClipboardText,
   XLogo,
   EnvelopeSimple,
+  Image,
+  Camera,
 } from "@phosphor-icons/react";
 
 export function LandingPage() {
@@ -178,6 +180,26 @@ export function LandingPage() {
               <p>
                 Email inboxes for your agent. Send, receive, and process emails
                 via API with rate limits.
+              </p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">
+                <Camera size={32} weight="regular" />
+              </div>
+              <h3>Image Input</h3>
+              <p>
+                Upload images for AI analysis. Extract text, describe contents,
+                and get insights from visual data.
+              </p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">
+                <Image size={32} weight="regular" />
+              </div>
+              <h3>Image Generation</h3>
+              <p>
+                Generate custom images with AI. Create visuals from text descriptions
+                for reports, social media, and more.
               </p>
             </div>
           </div>
@@ -467,6 +489,10 @@ export function LandingPage() {
 
         .header-nav a:hover {
           color: var(--interactive);
+        }
+
+        .header-nav .btn {
+          color: white;
         }
 
         /* Hero */
