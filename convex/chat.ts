@@ -10,6 +10,7 @@ import { stepCountIs } from '@convex-dev/agent';
 import { generateText as aiGenerateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { extractTextFromPDF, isPDFFile } from './utils/pdfExtractor';
+import { resolveModel } from './agent/modelRouter';
 
 /**
  * Chat Functions
@@ -75,6 +76,9 @@ export const send = action({
     }
 
     try {
+      // Resolve model for direct API calls
+      const resolved = await resolveModel(ctx);
+
       // Use dynamic agent for SyncBoard-configured model + tools
       const agent = await createDynamicAgent(ctx);
 
@@ -141,17 +145,25 @@ export const send = action({
         // For multimodal LLMs, we need to format the content properly
         // Check if the model supports vision by looking at model config
         const modelConfig = await ctx.runQuery(internal.agentConfig.getConfig);
-        const supportsVision = modelConfig?.model?.includes('vision') || 
-                              modelConfig?.model?.includes('claude-4') ||
-                              modelConfig?.model?.includes('claude-opus') ||
-                              modelConfig?.model?.includes('claude-sonnet') ||
-                              modelConfig?.model?.includes('gpt-4.5') ||
-                              modelConfig?.model?.includes('gpt-5') ||
-                              modelConfig?.model?.includes('gpt-4o') ||
-                              modelConfig?.model?.includes('o3') ||
-                              modelConfig?.model?.includes('o4') ||
-                              modelConfig?.model?.includes('gemini') ||
-                              modelConfig?.model?.includes('flash');
+        const visionModelTokens = [
+          'vision',
+          'claude-4',
+          'claude-opus',
+          'claude-sonnet',
+          'gpt-4.5',
+          'gpt-5',
+          'gpt-4o',
+          'gpt-4.1',
+          'gpt-4.1-mini',
+          'gpt-4.1-nano',
+          'o3',
+          'o4',
+          'gemini',
+          'flash',
+        ];
+        const supportsVision = visionModelTokens.some((token) =>
+          modelConfig?.model?.includes(token),
+        );
         
         if (supportsVision) {
           // Build multimodal content array for vision models
@@ -168,8 +180,10 @@ export const send = action({
           }
           
           // Add image attachments
+          let hasImages = false;
           for (const attachment of args.attachments!) {
             if (isImageFile(attachment.fileType)) {
+              hasImages = true;
               try {
                 console.log('Processing image:', attachment.fileName);
                 
@@ -197,23 +211,68 @@ export const send = action({
                     console.log('Image processed successfully');
                   } else {
                     console.error('Failed to fetch image:', attachment.url);
-                    content.push({
-                      type: 'image',
-                      image: attachment.url,
-                    });
                   }
                 }
               } catch (error) {
                 console.error('Error processing image:', error);
-                content.push({
-                  type: 'image',
-                  image: attachment.url,
-                });
               }
             }
           }
           
-          prompt = content;
+          // If we have images, use direct AI SDK instead of agent wrapper
+          if (hasImages && content.length > 0) {
+            console.log('Using direct AI SDK for vision');
+            const { text: responseText } = await aiGenerateText({
+              model: resolved.model,
+              messages: [
+                ...(system ? [{ role: 'system' as const, content: system }] : []),
+                {
+                  role: 'user' as const,
+                  content,
+                },
+              ],
+            });
+            
+            // Insert user message into agent component messages table
+            try {
+              await ctx.runMutation(internal.messages.insertMessage, {
+                threadId,
+                role: 'user',
+                content: args.message,
+                metadata,
+              });
+            } catch (e) {
+              console.error('Failed to insert user message:', e);
+            }
+            
+            // Insert assistant response
+            try {
+              await ctx.runMutation(internal.messages.insertMessage, {
+                threadId,
+                role: 'assistant',
+                content: responseText,
+              });
+            } catch (e) {
+              console.error('Failed to insert assistant message:', e);
+            }
+            
+            // Log activity
+            const logSummary = hasAttachments 
+              ? `Responded to: "${args.message.slice(0, 50)}${args.message.length > 50 ? '...' : ''}" with ${args.attachments!.length} attachment(s)`
+              : `Responded to: "${args.message.slice(0, 50)}${args.message.length > 50 ? '...' : ''}"`;
+            
+            await ctx.runMutation(internal.activityLog.log, {
+              actionType: 'chat_message',
+              summary: logSummary,
+              visibility: 'private',
+            });
+            
+            return {
+              response: responseText,
+              threadId,
+              toolCalls: undefined,
+            };
+          }
         }
       }
 

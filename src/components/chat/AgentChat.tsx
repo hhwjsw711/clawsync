@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
-import { useAction, useMutation } from 'convex/react';
+import { useAction } from 'convex/react';
 import { useThreadMessages } from '@convex-dev/agent/react';
 import { api } from '../../../convex/_generated/api';
 import { MessageBubble } from './MessageBubble';
@@ -18,6 +18,20 @@ interface ToolCall {
   args: string;
   result: string;
 }
+
+interface SendActionResult {
+  response?: string;
+  error?: string;
+  threadId?: string;
+  toolCalls?: ToolCall[];
+}
+
+type SendActionArgs = {
+  threadId?: string;
+  message: string;
+  sessionId: string;
+  attachments?: Attachment[];
+};
 
 interface DisplayMessage {
   id: string;
@@ -56,10 +70,10 @@ export function AgentChat({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const sendMessage = useAction(api.chat.send);
-  const generateUploadUrl = useMutation(api.fileUploads.generateUploadUrl);
-  const markComplete = useMutation(api.fileUploads.markComplete);
-  const getFileUrlByToken = useMutation(api.fileUploads.getFileUrlByToken);
+  // @ts-expect-error Convex generated types cause deep instantiation in useAction
+  const sendMessage = useAction(api.chat.send) as unknown as (
+    args: SendActionArgs,
+  ) => Promise<SendActionResult>;
 
   // Reactively subscribe to thread messages (streams as agent saves per step)
   const { results: threadMessages } = useThreadMessages(
@@ -114,9 +128,20 @@ export function AgentChat({
       
       // Extract attachments from message metadata
       let msgAttachments: Attachment[] | undefined;
-      if (role === 'user' && msg.message?.metadata?.attachments) {
+      const metadataCarrier = msg as unknown as {
+        message?: {
+          metadata?: { attachments?: string };
+          providerOptions?: { metadata?: { attachments?: string } };
+        };
+        providerOptions?: { metadata?: { attachments?: string } };
+      };
+      const attachmentsJson =
+        metadataCarrier.message?.metadata?.attachments ??
+        metadataCarrier.message?.providerOptions?.metadata?.attachments ??
+        metadataCarrier.providerOptions?.metadata?.attachments;
+      if (role === 'user' && attachmentsJson) {
         try {
-          msgAttachments = JSON.parse(msg.message.metadata.attachments);
+          msgAttachments = JSON.parse(attachmentsJson);
         } catch {
           // Ignore parse error
         }
@@ -292,7 +317,7 @@ export function AgentChat({
     const currentAttachments = [...attachments];
     setPendingUserMessage(trimmedInput || '(Image attached)');
     setPendingAttachments(currentAttachments.length > 0 ? currentAttachments : null);
-    // Clear attachments immediately so they disappear from input
+    setAttachments([]);
 
     try {
       const result = await sendMessage({
@@ -317,6 +342,7 @@ export function AgentChat({
       setIsLoading(false);
       setPendingUserMessage(null);
       setPendingAttachments(null);
+      setAttachments([]);
       inputRef.current?.focus();
     }
   };

@@ -1,5 +1,6 @@
 .message-bubble {
   max-width: 80%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
@@ -17,6 +18,15 @@
   padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-xl);
   word-wrap: break-word;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.message-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  display: block;
 }
 
 .message-bubble.user .message-content {
@@ -273,15 +283,22 @@
 /* Generated Image Preview */
 .generated-image-preview {
   margin-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: min(420px, 100%);
 }
 
 .generated-image {
-  max-width: 100%;
-  max-height: 400px;
+  width: 100%;
+  height: auto;
+  max-height: 420px;
   border-radius: var(--radius-lg);
   cursor: pointer;
   border: 1px solid var(--border);
   transition: transform 0.2s ease;
+  object-fit: contain;
+  background-color: var(--bg-primary);
 }
 
 .generated-image:hover {

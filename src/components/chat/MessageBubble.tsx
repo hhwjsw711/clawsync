@@ -1,6 +1,6 @@
 import ReactMarkdown from 'react-markdown';
 import './MessageBubble.css';
-import { Image, FileText, Download } from '@phosphor-icons/react';
+import { ImageIcon, FileTextIcon, DownloadIcon } from '@phosphor-icons/react';
 
 interface ToolCall {
   name: string;
@@ -48,7 +48,7 @@ export function MessageBubble({ role, content, timestamp, toolCalls, attachments
                     onClick={() => window.open(attachment.url, '_blank')}
                   />
                   <div className="image-overlay">
-                    <Image size={16} />
+                    <ImageIcon size={16} />
                     <span className="image-name">{attachment.fileName}</span>
                   </div>
                 </div>
@@ -61,7 +61,7 @@ export function MessageBubble({ role, content, timestamp, toolCalls, attachments
                   download={attachment.fileName}
                 >
                   <div className={`file-icon ${isPDFFile(attachment.fileType) ? 'pdf-icon' : ''}`}>
-                    <FileText size={24} />
+                    <FileTextIcon size={24} />
                     {isPDFFile(attachment.fileType) && <span className="pdf-badge">PDF</span>}
                   </div>
                   <div className="file-info">
@@ -69,7 +69,7 @@ export function MessageBubble({ role, content, timestamp, toolCalls, attachments
                     <span className="file-type">{isPDFFile(attachment.fileType) ? 'PDF Document' : attachment.fileType}</span>
                   </div>
                   <div className="file-download">
-                    <Download size={18} />
+                    <DownloadIcon size={18} />
                   </div>
                 </a>
               )}
@@ -120,7 +120,7 @@ export function MessageBubble({ role, content, timestamp, toolCalls, attachments
                               className="image-download-btn"
                               onClick={(e) => e.stopPropagation()}
                             >
-                              <Download size={16} />
+                              <DownloadIcon size={16} />
                               Download
                             </a>
                           </div>
