@@ -17,12 +17,18 @@ Deploy an open source personal AI agent with chat UI, skills system, MCP support
 
 - **Public Chat UI** - Clean, real-time chat with streaming responses
 - **SyncBoard Admin** - Private dashboard to manage your agent
-- **Skills System** - Template, webhook, or code-based skills
+- **Skills System** - Template, webhook, or code-based skills with a marketplace for external registries
 - **Multi-Model** - Claude, GPT, Grok, Gemini, or any OpenRouter model
 - **MCP Support** - Connect to MCP servers or expose your agent as one
 - **Channel Integrations** - Telegram, Discord, WhatsApp, Slack, Email
 - **X (Twitter) Integration** - Read, reply, and post tweets from your agent
 - **AgentMail** - Email inboxes for your agent with rate limits
+- **File Storage** - Upload and manage files with Convex native storage or Cloudflare R2
+- **Browser Automation** - Extract data, act, or run autonomous agents on any URL via Stagehand
+- **Web Scraping** - Scrape any URL to markdown with durable caching via Firecrawl
+- **AI Analytics** - Weekly or manual deep analysis of metrics with anomaly detection and recommendations
+- **Agent Research** - Competitive, topic, and real-time X research with external API sources
+- **Persistent Memory** - Supermemory integration for long-term recall across conversations
 - **Live Activity Feed** - Public real-time log of agent actions
 
 ## Quick Start
@@ -66,6 +72,19 @@ Optional for multi-model support:
 OPENAI_API_KEY=sk-...
 XAI_API_KEY=xai-...
 OPENROUTER_API_KEY=sk-or-...
+```
+
+Optional for SyncBoard features (each feature activates when its key is set):
+
+```
+FIRECRAWL_API_KEY=...              # Web scraping
+BROWSERBASE_API_KEY=...            # Stagehand browser automation
+BROWSERBASE_PROJECT_ID=...         # Stagehand browser automation
+SUPERMEMORY_API_KEY=...            # Persistent agent memory
+R2_ACCOUNT_ID=...                  # Cloudflare R2 file storage
+R2_ACCESS_KEY_ID=...               # Cloudflare R2 file storage
+R2_SECRET_ACCESS_KEY=...           # Cloudflare R2 file storage
+R2_BUCKET_NAME=...                 # Cloudflare R2 file storage
 ```
 
 4. **Start the frontend:**
@@ -195,16 +214,37 @@ clawsync/
 │   ├── auth.config.ts         # WorkOS config (placeholder)
 │   ├── xTwitter.ts            # X/Twitter integration
 │   ├── staticHosting.ts       # Self-static-hosting API
+│   ├── media.ts               # Convex native file storage
+│   ├── r2Storage.ts           # Cloudflare R2 storage (optional)
+│   ├── stagehand.ts           # Stagehand job storage
+│   ├── stagehandActions.ts    # Browser automation actions
+│   ├── firecrawl.ts           # Web scraping via Firecrawl
+│   ├── analytics.ts           # Metrics snapshot aggregation
+│   ├── analyticsReport.ts     # AI analytics report CRUD
+│   ├── analyticsReportAction.ts # AI report generation (Node.js)
+│   ├── analyticsCron.ts       # Weekly analytics cron
+│   ├── research.ts            # Research projects and findings
+│   ├── researchActions.ts     # Research execution actions
+│   ├── skillsMarketplace.ts   # Skills marketplace management
+│   ├── skillsMarketplaceActions.ts # Skills sync from registries
+│   ├── supermemory.ts         # Supermemory config
+│   ├── supermemoryActions.ts  # Persistent memory actions
 │   ├── schema.ts              # Database schema
 │   ├── convex.config.ts       # Component registration
 │   └── http.ts                # HTTP endpoints
 ├── src/                       # React frontend
 │   ├── pages/
-│   │   ├── LandingPage.tsx   # Public landing with tweets + activity
-│   │   ├── ChatPage.tsx      # Chat UI
-│   │   ├── SetupWizard.tsx   # First-run setup
-│   │   ├── SyncBoardX.tsx    # X/Twitter config
-│   │   ├── SyncBoard*.tsx    # Other admin pages
+│   │   ├── LandingPage.tsx    # Public landing with tweets + activity
+│   │   ├── ChatPage.tsx       # Chat UI
+│   │   ├── SetupWizard.tsx    # First-run setup
+│   │   ├── SyncBoardX.tsx     # X/Twitter config
+│   │   ├── SyncBoardMedia.tsx # File manager
+│   │   ├── SyncBoardStagehand.tsx # Browser automation
+│   │   ├── SyncBoardFirecrawl.tsx # Web scraping
+│   │   ├── SyncBoardAnalytics.tsx # AI analytics reports
+│   │   ├── SyncBoardResearch.tsx  # Research projects
+│   │   ├── SyncBoardMemory.tsx    # Supermemory config
+│   │   ├── SyncBoard*.tsx     # Other admin pages
 │   │   └── SyncBoardLogin.tsx # Password login
 │   ├── components/
 │   └── styles/
@@ -288,4 +328,4 @@ MIT License. Fork it, own it.
 
 ---
 
-Built with [Convex](https://convex.dev), [WorkOS](https://workos.com) (coming soon), [xAI](https://x.ai), and [Geist](https://vercel.com/font).
+Built with [Convex](https://convex.dev), [WorkOS](https://workos.com) (coming soon), [xAI](https://x.ai), [Supermemory](https://supermemory.ai), and [Geist](https://vercel.com/font).
