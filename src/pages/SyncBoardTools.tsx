@@ -11,11 +11,13 @@ import {
   InfoIcon,
   CalendarCheckIcon,
   ClockIcon,
+  DownloadIcon,
 } from '@phosphor-icons/react';
 import './SyncBoardTools.css';
 import { SyncBoardLayout } from '../components/syncboard/SyncBoardLayout';
 
 const allTools = [
+  { name: 'web_fetch', description: 'Fetch data from URLs and APIs', icon: DownloadIcon },
   { name: 'send_email', description: 'Send emails via AgentMail', icon: EnvelopeSimpleIcon },
   { name: 'post_tweet', description: 'Post tweets to X/Twitter', icon: TwitterLogoIcon },
   { name: 'send_telegram_message', description: 'Send messages via Telegram bot', icon: TelegramLogoIcon },
