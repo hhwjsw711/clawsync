@@ -79,8 +79,7 @@ export async function loadTools(
 
   // Load tools from enabled MCP servers
   try {
-    const mcpServers: Array<{ name: string; url?: string; _id: any }> =
-      // @ts-expect-error Deep type instantiation in generated API types
+    const mcpServers: Array<{ name: string; url?: string; _id: any; apiKeyEnvVar?: string }> =
       await ctx.runQuery(api.mcpServers.getEnabledApproved);
     console.log(`[MCP] Found ${mcpServers.length} enabled MCP servers`);
 

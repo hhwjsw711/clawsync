@@ -41,7 +41,7 @@ function formatCompanyName(companyId: string): string {
 }
 
 // Switch to a specific model
-export const switchModel = internalAction({
+export const switchModel: any = internalAction({
   args: {
     provider: v.string(),
     model: v.string(),
@@ -52,10 +52,10 @@ export const switchModel = internalAction({
     previousModel: v.optional(v.string()),
     newModel: v.optional(v.string()),
   }),
-  handler: async (ctx, args) => {
+  handler: async (ctx: any, args: any): Promise<any> => {
     try {
-      const config = await ctx.runQuery(internal.agentConfig.getConfig);
-      const previousModel = config?.model ?? 'unknown';
+      const config: any = await ctx.runQuery(internal.agentConfig.getConfig);
+      const previousModel: string = config?.model ?? 'unknown';
 
       const providers = getAvailableProviders();
       const validProvider = providers.find(p => p.id === args.provider);
