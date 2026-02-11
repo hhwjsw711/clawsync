@@ -1,5 +1,5 @@
 import { Agent } from '@convex-dev/agent';
-import { components } from '../_generated/api';
+import { components, internal } from '../_generated/api';
 import { ActionCtx } from '../_generated/server';
 import { Id } from '../_generated/dataModel';
 import { anthropic } from '@ai-sdk/anthropic';
