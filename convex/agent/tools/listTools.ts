@@ -35,6 +35,7 @@ Returns a categorized list of all enabled tools.`,
           { name: 'generate_image', description: 'Generate images using AI' },
         ],
         research: [
+          { name: 'web_fetch', description: 'Fetch data from URLs and APIs' },
           { name: 'web_search_exa', description: 'Search the web using Exa' },
           { name: 'company_research_exa', description: 'Research companies using Exa' },
           { name: 'get_code_context_exa', description: 'Get code examples and documentation' },

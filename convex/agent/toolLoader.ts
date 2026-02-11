@@ -11,6 +11,7 @@ import { createPostTweetTool } from './tools/postTweet';
 import { createScheduleTaskTool } from './tools/scheduleTask';
 import { createListToolsTool } from './tools/listTools';
 import { createManageScheduleTools } from './tools/manageSchedule';
+import { createWebFetchTool } from './tools/webFetch';
 
 /**
  * Tool Loader
@@ -178,6 +179,9 @@ export async function loadTools(ctx: ActionCtx): Promise<ToolSet> {
   tools['list_scheduled_tasks'] = scheduleManagementTools.list_scheduled_tasks;
   tools['delete_scheduled_task'] = scheduleManagementTools.delete_scheduled_task;
   tools['toggle_scheduled_task'] = scheduleManagementTools.toggle_scheduled_task;
+
+  // Add web fetch tool
+  tools['web_fetch'] = createWebFetchTool();
 
   // Add utility tools
   tools['get_current_date'] = createTool({
