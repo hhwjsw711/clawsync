@@ -138,7 +138,18 @@ export async function loadTools(ctx: ActionCtx): Promise<ToolSet> {
             console.log(`[MCP] Tool "${safeName}" conflicts with existing skill, keeping MCP version`);
           }
           
-          tools[safeName] = createMcpTool(server.url, mcpTool, server.name, server.apiKeyEnvVar);
+          // Resolve API key at tool creation time (not execution time)
+          let apiKey: string | undefined;
+          if (server.apiKeyEnvVar) {
+            apiKey = process.env[server.apiKeyEnvVar];
+            if (apiKey) {
+              console.log(`[MCP] Loaded API key for ${server.name} from ${server.apiKeyEnvVar}`);
+            } else {
+              console.warn(`[MCP] API key env var ${server.apiKeyEnvVar} not set for ${server.name}`);
+            }
+          }
+          
+          tools[safeName] = createMcpTool(server.url, mcpTool, server.name, apiKey);
         }
       } catch (e) {
         console.error(`[MCP] Failed to load tools from ${server.name}:`, e);
@@ -214,7 +225,7 @@ export async function loadTools(ctx: ActionCtx): Promise<ToolSet> {
 /**
  * Create a tool that proxies to an MCP server
  */
-function createMcpTool(serverUrl: string, mcpTool: any, serverName: string, apiKeyEnvVar?: string) {
+function createMcpTool(serverUrl: string, mcpTool: any, serverName: string, apiKey?: string) {
   const schema = mcpTool.inputSchema || mcpTool.input_schema || { type: 'object', properties: {} };
   const toolName = mcpTool.name || mcpTool.id || 'unknown';
 
@@ -241,14 +252,9 @@ function createMcpTool(serverUrl: string, mcpTool: any, serverName: string, apiK
         };
         
         // Add API key if configured
-        if (apiKeyEnvVar) {
-          const apiKey = process.env[apiKeyEnvVar];
-          if (apiKey) {
-            headers['Authorization'] = `Bearer ${apiKey}`;
-            console.log(`[MCP] Using API key from ${apiKeyEnvVar}`);
-          } else {
-            console.warn(`[MCP] API key env var ${apiKeyEnvVar} not set`);
-          }
+        if (apiKey) {
+          headers['Authorization'] = `Bearer ${apiKey}`;
+          console.log(`[MCP] Using API key for ${serverName}`);
         }
         
         for (const url of urlsToTry) {
